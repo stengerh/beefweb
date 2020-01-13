@@ -31,6 +31,7 @@ if(OS_WINDOWS)
 
     if(ENABLE_PLAYER_FOOBAR2000)
         local_library(foosdk)
+		local_library(qrcodegen)
     endif()
 
     local_library_option(zlib ENABLE_LOCAL_ZLIB "")

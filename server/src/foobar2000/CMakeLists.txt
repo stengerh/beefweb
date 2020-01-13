@@ -1,9 +1,11 @@
 include(ProjectInfo)
 
 find_package(foosdk REQUIRED)
+find_package(qrcodegen REQUIRED)
 
 include_directories(
     ${FOOSDK_INCLUDE_DIRS}
+	${QRCODEGEN_INCLUDE_DIRS}
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /d2notypeopt")
@@ -41,7 +43,7 @@ add_library(
 
 target_link_libraries(
     foobar2000_plugin
-    "${CORE_LIBRARIES_FOOBAR2000};${FOOSDK_LIBRARIES};shlwapi.lib"
+    "${CORE_LIBRARIES_FOOBAR2000};${FOOSDK_LIBRARIES};${QRCODEGEN_LIBRARIES};shlwapi.lib"
 )
 
 set_target_properties(

@@ -62,4 +62,5 @@ endif()
 
 if(ENABLE_PLAYER_FOOBAR2000)
     add_subdirectory(foosdk)
+    add_subdirectory(qrcodegen)
 endif()

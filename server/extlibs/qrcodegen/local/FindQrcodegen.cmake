@@ -1,0 +1,6 @@
+set(QRCODEGEN_INCLUDE_DIRS ${EXTLIB_INSTALL_DIR}/include)
+
+set(
+    QRCODEGEN_LIBRARIES
+    ${EXTLIB_INSTALL_DIR}/lib/qrcodegen.lib
+)
