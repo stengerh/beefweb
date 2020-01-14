@@ -29,9 +29,9 @@ namespace player_foobar2000 {
 	void QrCodeDialog::show()
 	{
 		tryCatchLog([](){
-			QrCodeDialog* instance = new QrCodeDialog();
+			pfc::refcounted_object_ptr_t<QrCodeDialog> instance;
+			instance.copy(new QrCodeDialog());
 			instance->create();
-			ShowWindow(instance->handle_, SW_SHOW);
 		});
 	}
 
@@ -50,38 +50,40 @@ namespace player_foobar2000 {
 	INT_PTR CALLBACK QrCodeDialog::dialogProcWrapper(
 		HWND window, UINT message, WPARAM wparam, LPARAM lparam)
 	{
-		QrCodeDialog* instance;
+		pfc::refcounted_object_ptr_t<QrCodeDialog> instance;
 
 		if (message == WM_INITDIALOG)
 		{
-			instance = reinterpret_cast<QrCodeDialog*>(lparam);
+			instance.copy(reinterpret_cast<QrCodeDialog*>(lparam));
 			instance->handle_ = window;
+			instance->refcount_add_ref();
 			SetWindowLongPtrW(window, DWLP_USER, lparam);
 			modeless_dialog_manager::g_add(window);
 		}
 		else
 		{
-			instance = reinterpret_cast<QrCodeDialog*>(GetWindowLongPtrW(window, DWLP_USER));
+			instance.copy(reinterpret_cast<QrCodeDialog*>(GetWindowLongPtrW(window, DWLP_USER)));
 		}
 
-		INT_PTR result;
+		INT_PTR result = 0;
 
-		if (instance)
+		if (instance.is_valid())
 		{
 			bool processed = tryCatchLog([&]
 			{
 				result = instance->dialogProc(message, wparam, lparam);
 			});
 		}
-		else
-		{
-			result = 0;
-		}
 
 		if (message == WM_DESTROY)
 		{
 			modeless_dialog_manager::g_remove(window);
-			delete instance;
+
+			if (instance.is_valid() && instance->handle_)
+			{
+				instance->handle_ = nullptr;
+				instance->refcount_release();
+			}
 		}
 
 		return result;
@@ -100,7 +102,6 @@ namespace player_foobar2000 {
 
 		case WM_DESTROY:
 			destroy();
-			handle_ = nullptr;
 			return 0;
 		}
 

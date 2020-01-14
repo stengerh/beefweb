@@ -6,7 +6,7 @@
 namespace msrv {
 namespace player_foobar2000 {
 
-	class QrCodeDialog
+	class QrCodeDialog : public pfc::refcounted_object_root
 	{
 	public:
 		QrCodeDialog();
