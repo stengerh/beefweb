@@ -19,6 +19,7 @@ set(
     player_playlists.cpp
     playlist_mapping.cpp playlist_mapping.hpp
     plugin.cpp plugin.hpp
+	qr_code_dialog.cpp qr_code_dialog.hpp
     resource.h resource.rc
     settings.cpp settings.hpp
     settings_page.cpp settings_page.hpp
