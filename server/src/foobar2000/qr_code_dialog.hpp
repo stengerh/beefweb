@@ -28,6 +28,9 @@ namespace player_foobar2000 {
 
 		HWND handle_;
 		HBITMAP image_;
+
+		// weak reference to current instance
+		static QrCodeDialog* current_;
 	};
 
 }}

@@ -16,22 +16,33 @@ using namespace qrcodegen;
 namespace msrv {
 namespace player_foobar2000 {
 
+	QrCodeDialog* QrCodeDialog::current_ = nullptr;
+
 	QrCodeDialog::QrCodeDialog()
 		: handle_(nullptr),
 		  image_(nullptr)
 	{
+		current_ = this;
 	}
 
 	QrCodeDialog::~QrCodeDialog()
 	{
+		current_ = nullptr;
 	}
 
 	void QrCodeDialog::show()
 	{
 		tryCatchLog([](){
-			pfc::refcounted_object_ptr_t<QrCodeDialog> instance;
-			instance.copy(new QrCodeDialog());
-			instance->create();
+			if (current_ && current_->handle_)
+			{
+				SetForegroundWindow(current_->handle_);
+			}
+			else
+			{
+				pfc::refcounted_object_ptr_t<QrCodeDialog> instance;
+				instance.copy(new QrCodeDialog());
+				instance->create();
+			}
 		});
 	}
 
